@@ -53,7 +53,9 @@ library(dplyr)
 ## 1.1 效應評估
 
 我們以個體經濟學為考量之進階課程，學生學習成效以**個經PR**（即學生第一次第一學期修完個經在同班的排名）來衡量。令**可修個體**虛擬變數其值為1若該學生通過修課限制可以修個經，反之為0。請寫下正確的效應結構（ 課堂上的Y即這裡的 **個經PR**，請對應課堂的$Y_{1i}-Y_{0i}$寫法，寫出這題的表示句子。)
-
+$y_{1i}-y_{0i}$
+$y_{1i}$為
+$y_{0i}$為
 ## 1.2 效應結構
 接續上題，課堂上的treatment dummy即為這裡的**可修個體**dummy，請寫下對應課堂效應結構$Y_i=Y_{0i}+(Y_{1i}-Y_{0i})T_i$之對應寫法（以這裡的文字符號表示）。
  
@@ -77,14 +79,30 @@ hw1Data <- read_csv("https://raw.githubusercontent.com/tpemartin/github-data/mas
 請進行OLS估計前述的簡單迴歸模型。（注意估計式標準誤必需使用穩健標準誤robust standard error，即使用三明治及HC調整後的標準誤。）
 
 ```{r ans13}
+library(sandwich)
+library(stargazer)
+library(lmtest)
+library(tidyr)
+library(broom)
+
+hw1Data %>%
+  lm((個經PR)~(可修個體),data=.)->model_1
+summary(model_1)
+coeftest(model_1, vcov. = vcovHC, type="HC1") -> model_1_coeftest
+summary(model_1_coeftest)
+
 ```
 
 ## 1.4 選擇性偏誤
 上題的估計結果很可能不正確，請說明原因故事（非數學證明）。
+答:
+case1.因為立足點不同，經原成績高的人對個體可能有比較高的學習能力，反之，經原成績低的人對於個體會相較低的學習能力
+case2.會存在遺漏變數的因子，因可否休息個經除經原及格與否，也是會因為是否修習微積分且是否為0分有關，彼此之間可能會有不一樣的結論。
 
 ## 1.5 選擇性偏誤
 這個資料還包含**經原PR**變數，它是學生最後修過的經原成績在該經原班的排名。說明有必要控制**經原PR**的理由（非數學證明）。
-
+答:
+因在探討控制經原PR之後，我們才能確定個經成績跟能不能修個體是獨立的，因為有可能經原成績高的通常個體成機會比較高，反之。
 
 ## 1.6 複迴歸模型
 估算以下的複迴歸模型：
@@ -92,6 +110,12 @@ $$個經PR_i=\beta_0+\beta_1 可修個體_i+經原PR_i+\epsilon_i.$$
 （注意估計式標準誤必需使用穩健標準誤robust standard error，即使用三明治及HC調整後的標準誤。）
 
 ```{r ans16}
+hw1Data %>%
+  lm((個經PR)~(可修個體)+(經原PR),data=.)->model_2
+summary(model_2)
+coeftest(model_2, vcov. = vcovHC, type="HC1") -> model_2_coeftest
+summary(model_2_coeftest)
+
 ```
 
 
@@ -99,6 +123,8 @@ $$個經PR_i=\beta_0+\beta_1 可修個體_i+經原PR_i+\epsilon_i.$$
 請計算**可修個體**為1與0兩群人的**經原PR平均**及**個經PR平均**。（hint: 可利用dplyr套件下的`group_by()`,`summarise()`，及`mean( ,na.rm=T)`, na.rm=T表示計算時排除NA值） 
 
 ```{r ans17}
+library(tidyverse)
+hw1Data %>% group_by(可修個體) %>% summarise(個體mea = mean(個經PR,na.rm=T),經原mea = mean(經原PR,na.rm=T))
 ```
 
 
@@ -111,6 +137,15 @@ $$個經PR_i=\beta_0+\beta_1 可修個體_i+經原PR_i+\epsilon_i.$$
   2. **可修個體**=1的族群，其**經原PR**平均較(6)____(高/低)
   
 故若不控制**經原PR**，因**可修個體**=1與=0兩群人也會分別帶有 **經原PR**  (7)____(高與低/低與高)特質，所以**可修個體**=1的人其**個經PR**高，有部份是因其**經原PR**也較(8)____(高/低)所至。
+
+(1)上升
+(2)
+(3)低
+(4)正向偏誤
+(5)正向
+(6)高
+(7)
+(8)
 
 ## 1.9 (Optional, 可不寫)
 
