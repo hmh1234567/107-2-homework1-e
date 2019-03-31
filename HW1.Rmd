@@ -164,15 +164,32 @@ $$\hat{\beta}_1=\frac{\sum_{i=1}^N (x_i-\bar{x})(y_i-\bar{y})}{\sum_{i=1}^N (x_i
 其中$x_i$為0或1的虛擬變數，且令$n_0$與$n_1$分別為樣本中$x_i=0$與$x_i=1$的個數。
 
 請證明：
-$$\hat{\beta}_1=\bar{y}_1-\bar{y}_0,$$
-其中$\bar{y}_1=\sum_{i,x_i=1}y_i/n_1$與$\bar{y}_0=\sum_{i,x_i=0}y_i/n_0$分別為$x_i=1$與$x_i=0$兩群樣本的$y_i$平均。
+$\hat{\beta}_1=\bar{y}_1-\bar{y}_0,$其中$\bar{y}_1=\sum_{i,x_i=1}y_i/n_1$與$\bar{y}_0=\sum_{i,x_i=0}y_i/n_0$
+分別為$x_i=1$與$x_i=0$兩群樣本的$y_i$平均。
+
+答:
+在$\hat{\beta}_1$方程式的分子形式可以轉寫為
+${\sum_{i=1}^N (x_i-\bar{x})(y_i-\bar{y})}$
+=$\sum_{i=1}^N (x_i-\bar{x})(y_i)$
+=$\sum_{i=1}^Nx_iy_i-\sum_{i=1}^N \bar{x}y_i$
+=$\frac{n_1n_0}{n_1+n_0}*(\bar{y_1}-\bar{y_0})$
+而分母形式可以轉寫為
+$\sum_{i=1}^N (x_i-\bar{x}^2)$
+=$\sum_{i=1}^Nx_i^2-n\bar{x}$
+=$n_1-n(\frac{n_1}{n_1+n_0})^2$
+=$\frac{n_1n_0}{n_1n_0}$
+
+而將分子分母兩式轉寫為的的$\hat{\beta}_1=\bar{y_1}-\bar{y_0}$
+
 
 提示：證明過程可以適時的使用以下特質：
 
-  * 
-  $$\sum_i w_i=\sum_{i,x_i=1} w_i +\sum_{i,x_i=0} w_i$$
+$\sum_i w_i=\sum_{i,x_i=1} w_i +\sum_{i,x_i=0} w_i$
   
-  * $\bar{x}=n_1/n$, 其中$n=n_0+n_1$。
+$\bar{x}=n_1/n$
+
+其中$n=n_0+n_1$
+
 
 
 ## 2.2
@@ -180,8 +197,11 @@ $$\hat{\beta}_1=\bar{y}_1-\bar{y}_0,$$
 假設$E(\epsilon_i|x_i)=0$，證明上題設定下：
 
   (a) $E(\hat{\beta}_1)=\beta_1$
+  答
+  $\hat{\beta}=(x'x)^{-1}(x'y)=(x'x)^{-1}(\beta*x+\epsilon_i|x_i)=\beta+(x'x)^{-1}(\epsilon_i|x_i)=E(\hat{\beta})=\beta$
   
   (b) 若條件在已知已知每個觀測值的$x_i$為1或0下$V(\epsilon_i|x_i)=\sigma^2$（即齊質變異），則條件變異數$V(\hat{\beta}_1|X)=\frac{n}{n_1 n_0}\sigma^2$。
+  
   
   (c) 若考慮異質變異$V(\epsilon_i|x_i)=\sigma_i^2$，則條件變異數$V(\hat{\beta}_1|X)=\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}$。
 
